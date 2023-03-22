@@ -71,7 +71,7 @@ public class PostsApiControllerTest {
                 .author(author)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/vi/posts";
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         mvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
