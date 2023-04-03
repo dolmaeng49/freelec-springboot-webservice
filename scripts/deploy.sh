@@ -6,7 +6,7 @@ PROJECT_NAME=freelec-springboot-webservice
 echo "> Build 파일 복사"
 cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
-CURRENT_PID=$(pgrep -f ${PROJECTNAME})
+CURRENT_PID=$(pgrep -f ${PROJECT_NAME})
 echo "> 현재 구동중인 애플리케이션 pid: $CURRENT_PID"
 
 if [ -z "$CURRENT_PID" ]; then
