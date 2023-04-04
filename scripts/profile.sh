@@ -17,7 +17,7 @@ function find_idle_profile() {
     fi
 
     echo "$IDLE_PROFILE"
-)
+}
 
 function find_idle_port() {
     IDLE_PROFILE=$(find_idle_profile)
