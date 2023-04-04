@@ -7,7 +7,7 @@ source ${ABSDIR}/profile.sh
 IDLE_PORT=$(find_idle_port)
 
 echo "> $IDLE_PORT 에서 구동 중인 pid 확인"
-IDLE_PORT=$(losf -ti tcp:${IDLE_PORT})
+IDLE_PORT=$(lsof -ti tcp:${IDLE_PORT})
 
 if [ -z ${IDLE_PORT} ]
 then
