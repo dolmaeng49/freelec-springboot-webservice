@@ -8,7 +8,7 @@ function switch_proxy() {
     IDLE_PORT=$(find_idle_port)
 
     echo "> 전환할 port: $IDLE_PORT"
-    echo "set \$service_url http:127.0.0.1:${IDLE_PORT};" | sudo tee /etc/nginx/sites-available/freelec-service-url.inc
+    echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" | sudo tee /etc/nginx/sites-available/freelec-service-url.inc
 
     echo "> nginx reload"
     sudo service nginx reload
