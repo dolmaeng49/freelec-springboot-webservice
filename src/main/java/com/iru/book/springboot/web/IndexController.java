@@ -24,14 +24,19 @@ public class IndexController {
         model.addAttribute("posts", postsService.findAllDesc());
 
         if (user != null) {
-            model.addAttribute("userName", user.getName());
+            model.addAttribute("userName", user.getEmail());
         }
 
         return "index";
     }
 
     @GetMapping("/posts/save")
-    public String postsSave() {
+    public String postsSave(Model model, @LoginUser SessionUser user) {
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+
         return "posts-save";
     }
 

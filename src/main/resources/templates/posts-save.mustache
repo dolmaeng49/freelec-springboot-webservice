@@ -11,7 +11,12 @@
             </div>
             <div class="form-group">
                 <label for="author"> 작성자 </label>
-                <input type="text" class="form-control" id="author" placeholder="작성자를 입력하세요">
+                {{#userName}}
+                    <input type="text" class="form-control" id="author" value="{{userName}}" readonly="true">
+                {{/userName}}
+                {{^userName}}
+                    <input type="text" class="form-control" id="author" placeholder="작성자를 입력하세요">
+                {{/userName}}
             </div>
             <div class="form-group">
                 <label for="content"> 내용 </label>
