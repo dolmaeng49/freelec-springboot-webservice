@@ -1,8 +1,12 @@
 package com.iru.book.springboot.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iru.book.springboot.config.auth.dto.SessionUser;
 import com.iru.book.springboot.domain.posts.Posts;
 import com.iru.book.springboot.domain.posts.PostsRepository;
+import com.iru.book.springboot.domain.user.Role;
+import com.iru.book.springboot.domain.user.User;
+import com.iru.book.springboot.domain.user.UserRepository;
 import com.iru.book.springboot.web.dto.PostsSaveRequestDto;
 import com.iru.book.springboot.web.dto.PostsUpdateRequestDto;
 import org.assertj.core.api.Assertions;
@@ -40,6 +44,9 @@ public class PostsApiControllerTest {
     private PostsRepository postsRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private WebApplicationContext context;
 
     private MockMvc mvc;
@@ -50,17 +57,26 @@ public class PostsApiControllerTest {
                 .webAppContextSetup(context)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
+
+        User user = User.builder()
+                .name("이름")
+                .email("test@test.com")
+                .role(Role.USER)
+                .build();
+        userRepository.save(user);
     }
 
     @After
     public void tearDown() throws Exception {
         postsRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @WithMockUser(roles = "USER")
     public void savePostsTest() throws Exception {
 
+        // given
         String title = "title";
         String content = "content";
         String author = "author";
@@ -72,12 +88,16 @@ public class PostsApiControllerTest {
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/posts";
+        User user = userRepository.findAll().get(0);
 
+        // when
         mvc.perform(MockMvcRequestBuilders.post(url)
+                        .sessionAttr("user", new SessionUser(user))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
+        // then
         List<Posts> allPosts = postsRepository.findAll();
         Assertions.assertThat(allPosts.get(0).getTitle()).isEqualTo(title);
         Assertions.assertThat(allPosts.get(0).getContent()).isEqualTo(content);
@@ -104,8 +124,11 @@ public class PostsApiControllerTest {
                 .content(expectedContent)
                 .build();
 
+        User user = userRepository.findAll().get(0);
+
         // when
         mvc.perform(MockMvcRequestBuilders.put(url)
+                        .sessionAttr("user", new SessionUser(user))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());

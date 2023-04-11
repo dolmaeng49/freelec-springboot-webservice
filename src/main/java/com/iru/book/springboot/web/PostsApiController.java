@@ -1,5 +1,7 @@
 package com.iru.book.springboot.web;
 
+import com.iru.book.springboot.config.auth.LoginUser;
+import com.iru.book.springboot.config.auth.dto.SessionUser;
 import com.iru.book.springboot.service.posts.PostsService;
 import com.iru.book.springboot.web.dto.PostsResponseDto;
 import com.iru.book.springboot.web.dto.PostsSaveRequestDto;
@@ -14,9 +16,8 @@ public class PostsApiController {
     private final PostsService postsService;
 
     @PostMapping("/api/v1/posts")
-    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
-
-        return postsService.save(requestDto);
+    public Long save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user) {
+        return postsService.save(requestDto, user);
     }
 
     @PutMapping("/api/v1/posts/{id}")

@@ -1,7 +1,10 @@
 package com.iru.book.springboot.service.posts;
 
+import com.iru.book.springboot.config.auth.dto.SessionUser;
 import com.iru.book.springboot.domain.posts.Posts;
 import com.iru.book.springboot.domain.posts.PostsRepository;
+import com.iru.book.springboot.domain.user.User;
+import com.iru.book.springboot.domain.user.UserRepository;
 import com.iru.book.springboot.web.dto.PostsListResponseDto;
 import com.iru.book.springboot.web.dto.PostsResponseDto;
 import com.iru.book.springboot.web.dto.PostsSaveRequestDto;
@@ -18,9 +21,14 @@ import java.util.stream.Collectors;
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Long save(PostsSaveRequestDto requestDto) {
+    public Long save(PostsSaveRequestDto requestDto, SessionUser sessionUser) {
+
+        User user = userRepository.findByEmail(sessionUser.getEmail()).orElseThrow(() ->
+                new IllegalArgumentException("일치하는 회원이 없습니다. email=" + sessionUser.getEmail()));
+
         return postsRepository.save(requestDto.toEntity()).getId();
     }
 
