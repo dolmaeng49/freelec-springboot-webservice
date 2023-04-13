@@ -28,7 +28,7 @@ var main = {
             alert('글이 등록되었습니다.');
             window.location.href = '/';
         }).fail(function (error) {
-            alert(JSON.stringify(error));
+            alert(error.responseJSON.message);
         });
     },
     update : function () {
@@ -49,7 +49,7 @@ var main = {
             alert('글이 수정되었습니다.');
             window.location.href = '/';
         }).fail(function (error) {
-            alert(JSON.stringify(error));
+            alert(error.responseJSON.message);
         });
     },
     delete : function () {
@@ -64,7 +64,7 @@ var main = {
             alert('글이 삭제되었습니다.');
             window.location.href = '/';
         }).fail(function (error) {
-            alert(JSON.stringify(error));
+            alert(error.responseJSON.message);
         });
     }
 };

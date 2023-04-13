@@ -16,13 +16,13 @@ public class PostsApiController {
     private final PostsService postsService;
 
     @PostMapping("/api/v1/posts")
-    public Long save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user) {
-        return postsService.save(requestDto, user);
+    public Long save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser sessionUser) {
+        return postsService.save(requestDto, sessionUser);
     }
 
     @PutMapping("/api/v1/posts/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
-        return postsService.update(id, requestDto);
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto, @LoginUser SessionUser sessionUser) {
+        return postsService.update(id, requestDto, sessionUser);
     }
 
     @GetMapping("/api/v1/posts/{id}")
@@ -31,8 +31,8 @@ public class PostsApiController {
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
-    public Long delete(@PathVariable Long id) {
-        postsService.delete(id);
+    public Long delete(@PathVariable Long id, @LoginUser SessionUser sessionUser) {
+        postsService.delete(id, sessionUser);
         return id;
     }
 }

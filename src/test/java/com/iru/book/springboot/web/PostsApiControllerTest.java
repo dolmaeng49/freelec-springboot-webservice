@@ -108,9 +108,11 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void updatePostTest() throws Exception {
         // given
+        User user = userRepository.findAll().get(0);
         Posts savedPost = postsRepository.save(Posts.builder()
                 .title("old_title")
                 .content("old_content")
+                .user(user)
                 .build());
 
         Long targetId = savedPost.getId();
@@ -124,7 +126,6 @@ public class PostsApiControllerTest {
                 .content(expectedContent)
                 .build();
 
-        User user = userRepository.findAll().get(0);
 
         // when
         mvc.perform(MockMvcRequestBuilders.put(url)

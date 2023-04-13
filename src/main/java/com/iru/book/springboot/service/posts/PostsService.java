@@ -29,13 +29,17 @@ public class PostsService {
         User user = userRepository.findByEmail(sessionUser.getEmail()).orElseThrow(() ->
                 new IllegalArgumentException("일치하는 회원이 없습니다. email=" + sessionUser.getEmail()));
 
-        return postsRepository.save(requestDto.toEntity()).getId();
+        return postsRepository.save(requestDto.toEntity(user)).getId();
     }
 
     @Transactional
-    public Long update(Long id, PostsUpdateRequestDto requestDto) {
+    public Long update(Long id, PostsUpdateRequestDto requestDto, SessionUser sessionUser) {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        if (!posts.getUser().getEmail().equals(sessionUser.getEmail())) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
 
@@ -57,9 +61,13 @@ public class PostsService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, SessionUser sessionUser) {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        if (!posts.getUser().getEmail().equals(sessionUser.getEmail())) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
 
         postsRepository.delete(posts);
     }

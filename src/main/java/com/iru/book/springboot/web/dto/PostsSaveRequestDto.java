@@ -1,6 +1,7 @@
 package com.iru.book.springboot.web.dto;
 
 import com.iru.book.springboot.domain.posts.Posts;
+import com.iru.book.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,12 @@ public class PostsSaveRequestDto {
         this.author = author;
     }
 
-    public Posts toEntity() {
+    public Posts toEntity(User user) {
         return Posts.builder()
                 .title(title)
                 .content(content)
                 .author(author)
+                .user(user)
                 .build();
     }
 }
